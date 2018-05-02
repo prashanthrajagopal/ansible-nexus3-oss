@@ -4,9 +4,6 @@
 
 - include: nexus_install.yml
 
-- include: httpd_reverse_proxy_config.yml
-  when: httpd_setup_enable
-
 - include: admin_password_setup.yml
 
 - name: Deleting default repositories
@@ -149,22 +146,6 @@
     script_name: setup_base_url
     args:
       base_url: "https://{{ public_hostname }}/"
-
-- include: call_script.yml
-  vars:
-    script_name: setup_http_proxy
-    args:
-      with_http_proxy: "{{ nexus_with_http_proxy }}"
-      http_proxy_host: "{{ nexus_http_proxy_host }}"
-      http_proxy_port: "{{ nexus_http_proxy_port }}"
-      http_proxy_username: "{{ nexus_http_proxy_username }}"
-      http_proxy_password: "{{ nexus_http_proxy_password }}"
-      with_https_proxy: "{{ nexus_with_https_proxy }}"
-      https_proxy_host: "{{ nexus_https_proxy_host }}"
-      https_proxy_port: "{{ nexus_https_proxy_port }}"
-      https_proxy_username: "{{ nexus_https_proxy_username }}"
-      https_proxy_password: "{{ nexus_https_proxy_password }}"
-      proxy_exclude_hosts: "{{ nexus_proxy_exclude_hosts }}"
 
 - name: Configure branding capability
   include: call_script.yml
