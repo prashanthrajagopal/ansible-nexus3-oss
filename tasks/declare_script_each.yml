@@ -1,13 +1,18 @@
 ---
 - name: Removing (potential) previously declared Groovy script {{ item }}
   uri:
-    url: "http://admin:{{ current_nexus_admin_password }}@localhost:{{ nexus_default_port }}{{ nexus_default_context_path }}service/rest/v1/script/{{ item }}"
+    url: "http://127.0.0.1:{{ nexus_default_port }}{{ nexus_default_context_path }}service/rest/v1/script/{{ item }}"
     method: DELETE
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    force_basic_auth: yes
     status_code: 204,404
+  environment:
+    no_proxy: 127.0.0.1
 
 - name: Declaring Groovy script {{ item }}
   uri:
-    url: "http://localhost:{{ nexus_default_port }}{{ nexus_default_context_path }}service/rest/v1/script"
+    url: "http://127.0.0.1:{{ nexus_default_port }}{{ nexus_default_context_path }}service/rest/v1/script"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
     body_format: json
@@ -18,4 +23,6 @@
       name: "{{ item }}"
       type: 'groovy'
       content: "{{ lookup('file', 'groovy/' + item + '.groovy') }}"
+  environment:
+    no_proxy: 127.0.0.1
 
